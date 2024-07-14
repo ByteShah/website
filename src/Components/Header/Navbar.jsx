@@ -4,7 +4,7 @@ import "./Navbar.css";
 import { useSelector } from "react-redux";
 
 import logo from "../../Assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { RiMenu2Line } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
@@ -12,6 +12,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { RiShoppingBagLine } from "react-icons/ri";
 import { MdOutlineClose } from "react-icons/md";
 import { FiHeart } from "react-icons/fi";
+import { RiLogoutBoxLine } from "react-icons/ri";
 
 // social Links imports Icons
 
@@ -25,12 +26,20 @@ import Badge from "@mui/material/Badge";
 
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
+  const token = localStorage.getItem("access_token");
+  const navigate = useNavigate();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
     document.body.style.overflow = mobileMenuOpen ? "auto" : "hidden";
+  };
+
+  const onLogOut = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("uid");
+    navigate("/loginSignUp");
   };
 
   return (
@@ -65,9 +74,18 @@ const Navbar = () => {
         </div>
         <div className="iconContainer">
           <FiSearch size={22} />
-          <Link to="/loginSignUp">
-            <FaRegUser size={22} />
-          </Link>
+          {token ? (
+            <RiLogoutBoxLine
+              onClick={onLogOut}
+              size={22}
+              style={{ cursor: "pointer" }}
+            />
+          ) : (
+            <Link to="/loginSignUp">
+              <FaRegUser size={22} />
+            </Link>
+          )}
+
           <Link to="/cart">
             <Badge
               badgeContent={cart.items.length === 0 ? "0" : cart.items.length}

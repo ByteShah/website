@@ -10,6 +10,7 @@ const LoginSignUp = () => {
     email: "",
     phone: "",
     password: "",
+    role: "user",
   });
   const [loginData, setLoginData] = useState({
     email: "",
@@ -42,7 +43,7 @@ const LoginSignUp = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://192.168.1.15:8000/api/register",
+        "http://192.168.1.217:8000/api/register",
         registerData
       );
       const token = response.data.token;
@@ -60,7 +61,7 @@ const LoginSignUp = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://192.168.1.15:8000/api/login",
+        "http://192.168.1.217:8000/api/login",
         loginData
       );
       const token = response.data.token;

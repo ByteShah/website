@@ -35,7 +35,7 @@ const RelatedProducts = () => {
       <div className="relatedProductSection">
         <div className="relatedProducts">
           <h2>
-            RELATED <span>PRODUCTS</span>
+            RELATED <span>BOOKS</span>
           </h2>
         </div>
         <div className="relatedProductSlider">
@@ -83,11 +83,11 @@ const RelatedProducts = () => {
                         alt={product.productName}
                         className="rpFrontImg"
                       />
-                      <img
+                      {/* <img
                         src={product.backImg}
                         className="rpBackImg"
                         alt={product.productName}
-                      />
+                      /> */}
                       <h4>Add to Cart</h4>
                     </div>
 

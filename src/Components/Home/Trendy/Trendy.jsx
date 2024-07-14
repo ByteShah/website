@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Trendy.css";
 
 import { useDispatch } from "react-redux";
@@ -6,16 +6,19 @@ import { addToCart } from "../../../Features/Cart/cartSlice";
 
 import { Link } from "react-router-dom";
 
-import StoreData from "../../../Data/StoreData";
-
 import { FiHeart } from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
+import axios from "axios";
 
 const Trendy = () => {
   const dispatch = useDispatch();
 
   const [activeTab, setActiveTab] = useState("tab1");
+  const [bookData, setBookData] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [bestSeller, setBetSeller] = useState([]);
+  const [topRated, setTopRated] = useState([]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -37,25 +40,78 @@ const Trendy = () => {
     }));
   };
 
-  const sortByPrice = (a, b) => {
-    return a.productPrice - b.productPrice;
-  };
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get("http://192.168.1.217:8000/api/books", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.status) {
+          setBookData(res?.data?.data);
+          console.log("res", res);
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
 
-  const sortByReviews = (a, b) => {
-    const reviewsA = parseInt(
-      a.productReviews.replace("k+ reviews", "").replace(",", "")
-    );
-    const reviewsB = parseInt(
-      b.productReviews.replace("k+ reviews", "").replace(",", "")
-    );
-    return reviewsB - reviewsA;
-  };
+    // New Arrivals
+    axios
+      .get("http://192.168.1.217:8000/api/latestbooks", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.status) {
+          setNewArrivals(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
+
+    // Best Seller
+    axios
+      .get("http://192.168.1.217:8000/api/bestseller", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.status) {
+          setBetSeller(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
+
+    // Top Rated
+    axios
+      .get("http://192.168.1.217:8000/api/toprated", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.status) {
+          setTopRated(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
+  }, []);
 
   return (
     <div>
       <div className="trendyProducts">
         <h2>
-          Our Trendy <span>Products</span>
+          Our Trendy <span>Books</span>
         </h2>
         <div className="trendyTabs">
           <div className="tabs">
@@ -89,54 +145,50 @@ const Trendy = () => {
 
             {activeTab === "tab1" && (
               <div className="trendyMainContainer">
-                {StoreData.slice(0, 8).map((product) => {
+                {bookData.slice(0, 8).map((book) => {
                   return (
-                    <div className="trendyProductContainer" key={product.id}>
+                    <div className="trendyProductContainer" key={book.id}>
                       <div className="trendyProductImages">
                         <Link to="/Product" onClick={scrollToTop}>
                           <img
-                            src={product.frontImg}
+                            src={book.image}
                             alt=""
                             className="trendyProduct_front"
                           />
-                          <img
+                          {/* <img
                             src={product.backImg}
                             alt=""
                             className="trendyProduct_back"
-                          />
+                          /> */}
                         </Link>
-                        <h4 onClick={() => dispatch(addToCart(product))}>
+                        <h4 onClick={() => dispatch(addToCart(book))}>
                           Add to Cart
                         </h4>
                       </div>
                       <div
                         className="trendyProductImagesCart"
-                        onClick={() => dispatch(addToCart(product))}
+                        onClick={() => dispatch(addToCart(book))}
                       >
                         <FaCartPlus />
                       </div>
 
                       <div className="trendyProductInfo">
                         <div className="trendyProductCategoryWishlist">
-                          <p>Dresses</p>
+                          <p>{book?.genre}</p>
                           <FiHeart
-                            onClick={() =>
-                              handleWishlistClick(product.productID)
-                            }
+                            onClick={() => handleWishlistClick(book.id)}
                             style={{
-                              color: wishList[product.productID]
-                                ? "red"
-                                : "#767676",
+                              color: wishList[book.id] ? "red" : "#767676",
                               cursor: "pointer",
                             }}
                           />
                         </div>
                         <div className="trendyProductNameInfo">
                           <Link to="product" onClick={scrollToTop}>
-                            <h5>{product.productName}</h5>
+                            <h5>{book.title}</h5>
                           </Link>
 
-                          <p>${product.productPrice}</p>
+                          <p>{book.author}</p>
                           <div className="trendyProductRatingReviews">
                             <div className="trendyProductRatingStar">
                               <FaStar color="#FEC78A" size={10} />
@@ -145,7 +197,7 @@ const Trendy = () => {
                               <FaStar color="#FEC78A" size={10} />
                               <FaStar color="#FEC78A" size={10} />
                             </div>
-                            <span>{product.productReviews}</span>
+                            {/* <span>{product.productReviews}</span> */}
                           </div>
                         </div>
                       </div>
@@ -159,68 +211,62 @@ const Trendy = () => {
 
             {activeTab === "tab2" && (
               <div className="trendyMainContainer">
-                {StoreData.slice(0, 8)
-                  .reverse()
-                  .map((product) => {
-                    return (
-                      <div className="trendyProductContainer">
-                        <div className="trendyProductImages">
-                          <Link to="/Product" onClick={scrollToTop}>
-                            <img
-                              src={product.frontImg}
-                              alt=""
-                              className="trendyProduct_front"
-                            />
-                            <img
+                {newArrivals.slice(0, 8).map((book) => {
+                  return (
+                    <div key={book?.id} className="trendyProductContainer">
+                      <div className="trendyProductImages">
+                        <Link to="/Product" onClick={scrollToTop}>
+                          <img
+                            src={book.image}
+                            alt=""
+                            className="trendyProduct_front"
+                          />
+                          {/* <img
                               src={product.backImg}
                               alt=""
                               className="trendyProduct_back"
-                            />
+                            /> */}
+                        </Link>
+                        <h4>Add to Cart</h4>
+                      </div>
+                      <div
+                        className="trendyProductImagesCart"
+                        onClick={() => dispatch(addToCart(book))}
+                      >
+                        <FaCartPlus />
+                      </div>
+                      <div className="trendyProductInfo">
+                        <div className="trendyProductCategoryWishlist">
+                          <p>{book?.genre}</p>
+                          <FiHeart
+                            onClick={() => handleWishlistClick(book.id)}
+                            style={{
+                              color: wishList[book.id] ? "red" : "#767676",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </div>
+                        <div className="trendyProductNameInfo">
+                          <Link to="product" onClick={scrollToTop}>
+                            <h5>{book.title}</h5>
                           </Link>
-                          <h4>Add to Cart</h4>
-                        </div>
-                        <div
-                          className="trendyProductImagesCart"
-                          onClick={() => dispatch(addToCart(product))}
-                        >
-                          <FaCartPlus />
-                        </div>
-                        <div className="trendyProductInfo">
-                          <div className="trendyProductCategoryWishlist">
-                            <p>Dresses</p>
-                            <FiHeart
-                              onClick={() =>
-                                handleWishlistClick(product.productID)
-                              }
-                              style={{
-                                color: wishList[product.productID]
-                                  ? "red"
-                                  : "#767676",
-                                cursor: "pointer",
-                              }}
-                            />
-                          </div>
-                          <div className="trendyProductNameInfo">
-                            <Link to="product" onClick={scrollToTop}>
-                              <h5>{product.productName}</h5>
-                            </Link>
 
-                            <p>${product.productPrice}</p>
-                            <div className="trendyProductRatingReviews">
-                              <div className="trendyProductRatingStar">
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                              </div>
-                              <span>{product.productReviews}</span>
+                          <p>{book.author}</p>
+                          <div className="trendyProductRatingReviews">
+                            <div className="trendyProductRatingStar">
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
                             </div>
+                            {/* <span>{product.productReviews}</span> */}
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
               </div>
             )}
 
@@ -228,68 +274,62 @@ const Trendy = () => {
 
             {activeTab === "tab3" && (
               <div className="trendyMainContainer">
-                {StoreData.slice(0, 8)
-                  .sort(sortByReviews)
-                  .map((product) => {
-                    return (
-                      <div className="trendyProductContainer">
-                        <div className="trendyProductImages">
-                          <Link to="/Product" onClick={scrollToTop}>
-                            <img
-                              src={product.frontImg}
-                              alt=""
-                              className="trendyProduct_front"
-                            />
-                            <img
+                {bestSeller.slice(0, 8).map((book) => {
+                  return (
+                    <div key={book?.id} className="trendyProductContainer">
+                      <div className="trendyProductImages">
+                        <Link to="/Product" onClick={scrollToTop}>
+                          <img
+                            src={book.image}
+                            alt=""
+                            className="trendyProduct_front"
+                          />
+                          {/* <img
                               src={product.backImg}
                               alt=""
                               className="trendyProduct_back"
-                            />
+                            /> */}
+                        </Link>
+                        <h4>Add to Cart</h4>
+                      </div>
+                      <div
+                        className="trendyProductImagesCart"
+                        onClick={() => dispatch(addToCart(book))}
+                      >
+                        <FaCartPlus />
+                      </div>
+                      <div className="trendyProductInfo">
+                        <div className="trendyProductCategoryWishlist">
+                          <p>{book?.genre}</p>
+                          <FiHeart
+                            onClick={() => handleWishlistClick(book.id)}
+                            style={{
+                              color: wishList[book.id] ? "red" : "#767676",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </div>
+                        <div className="trendyProductNameInfo">
+                          <Link to="product" onClick={scrollToTop}>
+                            <h5>{book.title}</h5>
                           </Link>
-                          <h4>Add to Cart</h4>
-                        </div>
-                        <div
-                          className="trendyProductImagesCart"
-                          onClick={() => dispatch(addToCart(product))}
-                        >
-                          <FaCartPlus />
-                        </div>
-                        <div className="trendyProductInfo">
-                          <div className="trendyProductCategoryWishlist">
-                            <p>Dresses</p>
-                            <FiHeart
-                              onClick={() =>
-                                handleWishlistClick(product.productID)
-                              }
-                              style={{
-                                color: wishList[product.productID]
-                                  ? "red"
-                                  : "#767676",
-                                cursor: "pointer",
-                              }}
-                            />
-                          </div>
-                          <div className="trendyProductNameInfo">
-                            <Link to="product" onClick={scrollToTop}>
-                              <h5>{product.productName}</h5>
-                            </Link>
 
-                            <p>${product.productPrice}</p>
-                            <div className="trendyProductRatingReviews">
-                              <div className="trendyProductRatingStar">
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                              </div>
-                              <span>{product.productReviews}</span>
+                          <p>{book.author}</p>
+                          <div className="trendyProductRatingReviews">
+                            <div className="trendyProductRatingStar">
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
                             </div>
+                            {/* <span>{book.productReviews}</span> */}
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
               </div>
             )}
 
@@ -297,68 +337,62 @@ const Trendy = () => {
 
             {activeTab === "tab4" && (
               <div className="trendyMainContainer">
-                {StoreData.slice(0, 8)
-                  .sort(sortByPrice)
-                  .map((product) => {
-                    return (
-                      <div className="trendyProductContainer">
-                        <div className="trendyProductImages">
-                          <Link to="/Product">
-                            <img
-                              src={product.frontImg}
-                              alt=""
-                              className="trendyProduct_front"
-                            />
-                            <img
+                {topRated.slice(0, 8).map((book) => {
+                  return (
+                    <div key={book?.id} className="trendyProductContainer">
+                      <div className="trendyProductImages">
+                        <Link to="/Product">
+                          <img
+                            src={book.image}
+                            alt=""
+                            className="trendyProduct_front"
+                          />
+                          {/* <img
                               src={product.backImg}
                               alt=""
                               className="trendyProduct_back"
-                            />
+                            /> */}
+                        </Link>
+                        <h4>Add to Cart</h4>
+                      </div>
+                      <div
+                        className="trendyProductImagesCart"
+                        onClick={() => dispatch(addToCart(book))}
+                      >
+                        <FaCartPlus />
+                      </div>
+                      <div className="trendyProductInfo">
+                        <div className="trendyProductCategoryWishlist">
+                          <p>{book?.genre}</p>
+                          <FiHeart
+                            onClick={() => handleWishlistClick(book.id)}
+                            style={{
+                              color: wishList[book.id] ? "red" : "#767676",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </div>
+                        <div className="trendyProductNameInfo">
+                          <Link to="/product" onClick={scrollToTop}>
+                            <h5>{book.title}</h5>
                           </Link>
-                          <h4>Add to Cart</h4>
-                        </div>
-                        <div
-                          className="trendyProductImagesCart"
-                          onClick={() => dispatch(addToCart(product))}
-                        >
-                          <FaCartPlus />
-                        </div>
-                        <div className="trendyProductInfo">
-                          <div className="trendyProductCategoryWishlist">
-                            <p>Dresses</p>
-                            <FiHeart
-                              onClick={() =>
-                                handleWishlistClick(product.productID)
-                              }
-                              style={{
-                                color: wishList[product.productID]
-                                  ? "red"
-                                  : "#767676",
-                                cursor: "pointer",
-                              }}
-                            />
-                          </div>
-                          <div className="trendyProductNameInfo">
-                            <Link to="/product" onClick={scrollToTop}>
-                              <h5>{product.productName}</h5>
-                            </Link>
 
-                            <p>${product.productPrice}</p>
-                            <div className="trendyProductRatingReviews">
-                              <div className="trendyProductRatingStar">
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                                <FaStar color="#FEC78A" size={10} />
-                              </div>
-                              <span>{product.productReviews}</span>
+                          <p>{book.author}</p>
+                          <div className="trendyProductRatingReviews">
+                            <div className="trendyProductRatingStar">
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
+                              <FaStar color="#FEC78A" size={10} />
                             </div>
+                            {/* <span>{book.productReviews}</span> */}
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

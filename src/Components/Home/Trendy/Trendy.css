@@ -108,7 +108,7 @@
   top: 0;
   left: 0;
   overflow: hidden;
-  object-fit: cover;
+  object-fit: fill;
   transition: opacity 0.3s linear;
 }
 
@@ -128,9 +128,9 @@
   cursor: pointer;
 }
 
-.trendyProductContainer:hover .trendyProduct_front {
+/* .trendyProductContainer:hover .trendyProduct_front {
   opacity: 0;
-}
+} */
 
 .trendyProductContainer h4 {
   position: relative;

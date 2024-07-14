@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import DealImg from "../../../Assets/Deal/dealbg.jpeg";
 import "./DealTimer.css";
 
 const DealTimer = () => {
@@ -11,7 +12,7 @@ const DealTimer = () => {
   };
 
   const [timeLeft, setTimeLeft] = useState({
-    days: 31,
+    days: 7,
     hours: 29,
     minutes: 57,
     seconds: 17,
@@ -64,37 +65,44 @@ const DealTimer = () => {
       <div className="mainDeal">
         <div className="dealTimer">
           <div className="dealTimerMainContent">
-            <div className="dealTimeContent">
-              <p>Deal of the Week</p>
-              <h3>
-                Spring
-                <span> Collection</span>
-              </h3>
-              <div className="dealTimeLink">
-                <Link to="/shop" onClick={scrollToTop}>
-                  Shop Now
-                </Link>
+            <div className="row">
+              <div className="col-md-9">
+                <div className="dealTimeContent">
+                  <p>Deal of the Week</p>
+                  <h3>
+                    Antic
+                    <span> Collection</span>
+                  </h3>
+                  <div className="dealTimeLink mb-5">
+                    <Link to="/shop" onClick={scrollToTop}>
+                      Shop Now
+                    </Link>
+                  </div>
+                </div>
+                <div className="dealTimeCounter">
+                  <div className="dealTimeDigit">
+                    <h4>{timeLeft.days}</h4>
+                    <p>Days</p>
+                  </div>
+                  <h4>:</h4>
+                  <div className="dealTimeDigit">
+                    <h4>{timeLeft.hours}</h4>
+                    <p>Hours</p>
+                  </div>
+                  <h4>:</h4>
+                  <div className="dealTimeDigit">
+                    <h4>{formatTime(timeLeft.minutes)}</h4>
+                    <p>Minutes</p>
+                  </div>
+                  <h4>:</h4>
+                  <div className="dealTimeDigit">
+                    <h4>{formatTime(timeLeft.seconds)}</h4>
+                    <p>Seconds</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="dealTimeCounter">
-              <div className="dealTimeDigit">
-                <h4>{timeLeft.days}</h4>
-                <p>Days</p>
-              </div>
-              <h4>:</h4>
-              <div className="dealTimeDigit">
-                <h4>{timeLeft.hours}</h4>
-                <p>Hours</p>
-              </div>
-              <h4>:</h4>
-              <div className="dealTimeDigit">
-                <h4>{formatTime(timeLeft.minutes)}</h4>
-                <p>Minutes</p>
-              </div>
-              <h4>:</h4>
-              <div className="dealTimeDigit">
-                <h4>{formatTime(timeLeft.seconds)}</h4>
-                <p>Seconds</p>
+              <div className="col-md-3 d-none d-md-block">
+                <img src={DealImg} className="w-100" alt="" />
               </div>
             </div>
           </div>

@@ -122,7 +122,7 @@
   top: 0;
   left: 0;
   overflow: hidden;
-  object-fit: cover;
+  object-fit: fill;
   transition: opacity 0.3s linear;
 }
 
@@ -142,9 +142,9 @@
   cursor: pointer;
 }
 
-.sdProductContainer:hover .sdProduct_front {
+/* .sdProductContainer:hover .sdProduct_front {
   opacity: 0;
-}
+} */
 
 .sdProductContainer h4 {
   position: relative;

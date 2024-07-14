@@ -86,9 +86,9 @@
   cursor: pointer;
 }
 
-.rpContainer:hover .rpFrontImg {
+/* .rpContainer:hover .rpFrontImg {
   opacity: 0;
-}
+} */
 
 .rpContainer h4 {
   position: relative;

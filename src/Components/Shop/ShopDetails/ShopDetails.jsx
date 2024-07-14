@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ShopDetails.css";
 
 import { useDispatch } from "react-redux";
@@ -12,10 +12,12 @@ import { FaStar } from "react-icons/fa";
 import { IoFilterSharp, IoClose } from "react-icons/io5";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 import { FaCartPlus } from "react-icons/fa";
+import axios from "axios";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
 
+  const [bookData, setBookData] = useState([]);
   const [wishList, setWishList] = useState({});
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -40,6 +42,24 @@ const ShopDetails = () => {
   const closeDrawer = () => {
     setIsDrawerOpen(false);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get("http://192.168.1.217:8000/api/books", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.status) {
+          setBookData(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
+  }, []);
 
   return (
     <div>
@@ -82,28 +102,28 @@ const ShopDetails = () => {
             </div>
             <div className="shopDetailsProducts">
               <div className="shopDetailsProductsContainer">
-                {StoreData.slice(0, 6).map((product) => (
-                  <div className="sdProductContainer">
+                {bookData?.slice(0, 6).map((book) => (
+                  <div key={book?.id} className="sdProductContainer">
                     <div className="sdProductImages">
                       <Link to="/Product" onClick={scrollToTop}>
                         <img
-                          src={product.frontImg}
+                          src={book.image}
                           alt=""
                           className="sdProduct_front"
                         />
-                        <img
+                        {/* <img
                           src={product.backImg}
                           alt=""
                           className="sdProduct_back"
-                        />
+                        /> */}
                       </Link>
-                      <h4 onClick={() => dispatch(addToCart(product))}>
+                      <h4 onClick={() => dispatch(addToCart(book))}>
                         Add to Cart
                       </h4>
                     </div>
                     <div
                       className="sdProductImagesCart"
-                      onClick={() => dispatch(addToCart(product))}
+                      onClick={() => dispatch(addToCart(book))}
                     >
                       <FaCartPlus />
                     </div>
@@ -111,21 +131,19 @@ const ShopDetails = () => {
                       <div className="sdProductCategoryWishlist">
                         <p>Dresses</p>
                         <FiHeart
-                          onClick={() => handleWishlistClick(product.productID)}
+                          onClick={() => handleWishlistClick(book.id)}
                           style={{
-                            color: wishList[product.productID]
-                              ? "red"
-                              : "#767676",
+                            color: wishList[book.id] ? "red" : "#767676",
                             cursor: "pointer",
                           }}
                         />
                       </div>
                       <div className="sdProductNameInfo">
                         <Link to="/product" onClick={scrollToTop}>
-                          <h5>{product.productName}</h5>
+                          <h5>{book.title}</h5>
                         </Link>
 
-                        <p>${product.productPrice}</p>
+                        <p>{book.author}</p>
                         <div className="sdProductRatingReviews">
                           <div className="sdProductRatingStar">
                             <FaStar color="#FEC78A" size={10} />
@@ -134,7 +152,7 @@ const ShopDetails = () => {
                             <FaStar color="#FEC78A" size={10} />
                             <FaStar color="#FEC78A" size={10} />
                           </div>
-                          <span>{product.productReviews}</span>
+                          {/* <span>{book.productReviews}</span> */}
                         </div>
                       </div>
                     </div>

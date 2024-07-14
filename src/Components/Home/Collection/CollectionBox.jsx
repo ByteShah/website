@@ -22,11 +22,11 @@ const CollectionBox = () => {
         >
           <p className="col-p">Top Picks</p>
           <h3 className="col-h3">
-            <span>Tech Corp</span>
+            <span>Tech Books</span>
           </h3>
           <div className="col-link">
-            <Link to="/workspace/tech-corp" onClick={scrollToTop}>
-              <h5 className="text-white">Checkout Now</h5>
+            <Link to="/shop" onClick={scrollToTop}>
+              <h5 className="text-white">Shop Now</h5>
             </Link>
           </div>
         </div>
@@ -37,11 +37,11 @@ const CollectionBox = () => {
           >
             <p className="col-p">Top Picks</p>
             <h3 className="col-h3">
-              <span>Health Inc</span>
+              <span>Health books</span>
             </h3>
             <div className="col-link">
-              <Link to="/workspace/health-inc" onClick={scrollToTop}>
-                <h5 className="text-white">Checkout Now</h5>
+              <Link to="/shop" onClick={scrollToTop}>
+                <h5 className="text-white">Shop Now</h5>
               </Link>
             </div>
           </div>
@@ -52,11 +52,11 @@ const CollectionBox = () => {
             >
               <p className="col-p">Top Picks</p>
               <h3 className="col-h3">
-                <span>Edu Labs</span>
+                <span>Journals</span>
               </h3>
               <div className="col-link">
-                <Link to="/workspace/edu-labs" onClick={scrollToTop}>
-                  <h5 className="text-white">Checkout Now</h5>
+                <Link to="/shop" onClick={scrollToTop}>
+                  <h5 className="text-white">Shop Now</h5>
                 </Link>
               </div>
             </div>
@@ -69,7 +69,7 @@ const CollectionBox = () => {
               </p>
               <div className="col-link">
                 <Link to="/shop" onClick={scrollToTop}>
-                  <h5>Checkout Now</h5>
+                  <h5>Shop Now</h5>
                 </Link>
               </div>
             </div>
