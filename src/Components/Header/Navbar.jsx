@@ -61,13 +61,10 @@ const Navbar = () => {
                 <Link to="/shop">SHOP</Link>
               </li>
               <li>
-                <Link to="/blog">BLOG</Link>
-              </li>
-              <li>
-                <Link to="/about">ABOUT</Link>
-              </li>
-              <li>
                 <Link to="/contact">CONTACT</Link>
+              </li>
+              <li>
+                <Link to="/due">History</Link>
               </li>
             </ul>
           </div>
@@ -152,18 +149,13 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/blog" onClick={toggleMobileMenu}>
-                    BLOG
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about" onClick={toggleMobileMenu}>
-                    ABOUT
-                  </Link>
-                </li>
-                <li>
                   <Link to="/contact" onClick={toggleMobileMenu}>
                     CONTACT
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/due" onClick={toggleMobileMenu}>
+                    History
                   </Link>
                 </li>
               </ul>

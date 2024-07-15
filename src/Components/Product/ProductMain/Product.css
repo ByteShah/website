@@ -25,11 +25,16 @@
 
 .productFullImg {
   position: relative;
+  display: flex;
+  justify-content: center;
+  width: 520px;
+  height: 520px;
+  background-color: #fafafa;
 }
 
 .productFullImg img {
-  width: 520px;
-  height: 520px;
+  width: 100%;
+  max-width: fit-content;
   pointer-events: none;
   background-color: #767676;
 }

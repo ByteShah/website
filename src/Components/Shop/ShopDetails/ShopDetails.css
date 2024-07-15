@@ -64,9 +64,11 @@
   font-size: 14px;
 }
 
-.shopDetailsSort select {
-  border: none;
+.shopDetailsSort input {
   text-transform: uppercase;
+  padding: 8px;
+  border-radius: 3px;
+  border: 1px solid #767676;
   outline: none;
   font-weight: 500;
   font-size: 14px;
@@ -316,7 +318,7 @@
   width: 100%;
 }
 
-.paginationNum p:first-child::after {
+.paginationNum p.active::after {
   content: "";
   position: absolute;
   bottom: -5px;

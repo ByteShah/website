@@ -26,12 +26,6 @@ const AdditionalInfo = () => {
               Description
             </p>
             <p
-              onClick={() => handleTabClick("aiTab2")}
-              className={activeTab === "aiTab2" ? "aiActive" : ""}
-            >
-              Additional Information
-            </p>
-            <p
               onClick={() => handleTabClick("aiTab3")}
               className={activeTab === "aiTab3" ? "aiActive" : ""}
             >
@@ -45,20 +39,17 @@ const AdditionalInfo = () => {
           {activeTab === "aiTab1" && (
             <div className="aiTabDescription">
               <div className="descriptionPara">
-                <h3>Sed do eiusmod tempor incididunt ut labore</h3>
+                <h3>The Plague</h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum. Sed ut perspiciatis unde omnis
-                  iste natus error sit voluptatem accusantium doloremque
-                  laudantium, totam rem aperiam, eaque ipsa quae ab illo
-                  inventore veritatis et quasi architecto beatae vitae dicta
-                  sunt explicabo.
+                  The Plague by Albert Camus is a profound and gripping novel
+                  set in the Algerian city of Oran, which is abruptly struck by
+                  a deadly plague. Through the eyes of Dr. Rieux and other
+                  townspeople, Camus explores themes of human suffering,
+                  resilience, and solidarity in the face of existential crisis.
+                  The story delves into the absurdity of life and the struggle
+                  to find meaning amidst uncontrollable chaos. This timeless
+                  classic remains a powerful reflection on human nature and
+                  societal response to catastrophe.
                 </p>
               </div>
               <div className="descriptionParaGrid">
@@ -86,39 +77,6 @@ const AdditionalInfo = () => {
                     </ol>
                   </p>
                 </div>
-              </div>
-              <div className="descriptionPara">
-                <h3>Lining</h3>
-                <p style={{ marginTop: "-10px" }}>
-                  100% Polyester, Main: 100% Polyester.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Tab2 */}
-
-          {activeTab === "aiTab2" && (
-            <div className="aiTabAdditionalInfo">
-              <div className="additionalInfoContainer">
-                <h6>Weight</h6>
-                <p> 1.25 kg</p>
-              </div>
-              <div className="additionalInfoContainer">
-                <h6>Dimensions</h6>
-                <p> 90 x 60 x 90 cm</p>
-              </div>
-              <div className="additionalInfoContainer">
-                <h6>Size</h6>
-                <p> XS, S, M, L, XL</p>
-              </div>
-              <div className="additionalInfoContainer">
-                <h6>Color</h6>
-                <p> Black, Orange, White</p>
-              </div>
-              <div className="additionalInfoContainer">
-                <h6>Storage</h6>
-                <p> Relaxed fit shirt-style dress with a rugged</p>
               </div>
             </div>
           )}

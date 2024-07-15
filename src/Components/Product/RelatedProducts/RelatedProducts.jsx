@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./RelatedProducts.css";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,9 +12,32 @@ import StoreData from "../../../Data/StoreData";
 import { FiHeart } from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RelatedProducts = () => {
+  const navigate = useNavigate();
   const [wishList, setWishList] = useState({});
+
+  const [bookData, setBookData] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get("http://192.168.1.217:8000/api/books", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.status) {
+          setBookData(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
+  }, []);
 
   const handleWishlistClick = (productID) => {
     setWishList((prevWishlist) => ({
@@ -73,40 +96,39 @@ const RelatedProducts = () => {
               },
             }}
           >
-            {StoreData.slice(0, 8).map((product) => {
+            {bookData.slice(0, 8).map((book) => {
               return (
-                <SwiperSlide key={product.productID}>
+                <SwiperSlide key={book.id}>
                   <div className="rpContainer">
-                    <div className="rpImages" onClick={scrollToTop}>
-                      <img
-                        src={product.frontImg}
-                        alt={product.productName}
-                        className="rpFrontImg"
-                      />
-                      {/* <img
-                        src={product.backImg}
-                        className="rpBackImg"
-                        alt={product.productName}
-                      /> */}
-                      <h4>Add to Cart</h4>
+                    <div
+                      className="rpImages"
+                      onClick={() => {
+                        window.scrollTo({
+                          top: 0,
+                          behavior: "smooth",
+                        });
+                        navigate("/Product", {
+                          state: book,
+                        });
+                      }}
+                    >
+                      <img src={book.image} alt="" className="rpFrontImg" />
                     </div>
 
                     <div className="relatedProductInfo">
                       <div className="rpCategoryWishlist">
-                        <p>Dresses</p>
+                        <p>{book?.genre}</p>
                         <FiHeart
-                          onClick={() => handleWishlistClick(product.productID)}
+                          onClick={() => handleWishlistClick(book.id)}
                           style={{
-                            color: wishList[product.productID]
-                              ? "red"
-                              : "#767676",
+                            color: wishList[book.id] ? "red" : "#767676",
                             cursor: "pointer",
                           }}
                         />
                       </div>
                       <div className="productNameInfo">
-                        <h5 onClick={scrollToTop}>{product.productName}</h5>
-                        <p>${product.productPrice}</p>
+                        <h5 onClick={scrollToTop}>{book.title}</h5>
+                        <p>{book.author}</p>
                         <div className="productRatingReviews">
                           <div className="productRatingStar">
                             <FaStar color="#FEC78A" size={10} />
@@ -115,8 +137,7 @@ const RelatedProducts = () => {
                             <FaStar color="#FEC78A" size={10} />
                             <FaStar color="#FEC78A" size={10} />
                           </div>
-
-                          <span>{product.productReviews}</span>
+                          {/* <span>{book.productReviews}</span> */}
                         </div>
                       </div>
                     </div>

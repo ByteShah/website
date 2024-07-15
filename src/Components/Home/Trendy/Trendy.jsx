@@ -4,7 +4,7 @@ import "./Trendy.css";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../Features/Cart/cartSlice";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { FiHeart } from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
@@ -13,7 +13,7 @@ import axios from "axios";
 
 const Trendy = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("tab1");
   const [bookData, setBookData] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
@@ -51,7 +51,6 @@ const Trendy = () => {
       .then((res) => {
         if (res?.data?.status) {
           setBookData(res?.data?.data);
-          console.log("res", res);
         }
       })
       .catch((err) => {
@@ -149,27 +148,24 @@ const Trendy = () => {
                   return (
                     <div className="trendyProductContainer" key={book.id}>
                       <div className="trendyProductImages">
-                        <Link to="/Product" onClick={scrollToTop}>
+                        <div
+                          to="/Product"
+                          onClick={() => {
+                            window.scrollTo({
+                              top: 0,
+                              behavior: "smooth",
+                            });
+                            navigate("/Product", {
+                              state: book,
+                            });
+                          }}
+                        >
                           <img
                             src={book.image}
                             alt=""
                             className="trendyProduct_front"
                           />
-                          {/* <img
-                            src={product.backImg}
-                            alt=""
-                            className="trendyProduct_back"
-                          /> */}
-                        </Link>
-                        <h4 onClick={() => dispatch(addToCart(book))}>
-                          Add to Cart
-                        </h4>
-                      </div>
-                      <div
-                        className="trendyProductImagesCart"
-                        onClick={() => dispatch(addToCart(book))}
-                      >
-                        <FaCartPlus />
+                        </div>
                       </div>
 
                       <div className="trendyProductInfo">
@@ -221,19 +217,7 @@ const Trendy = () => {
                             alt=""
                             className="trendyProduct_front"
                           />
-                          {/* <img
-                              src={product.backImg}
-                              alt=""
-                              className="trendyProduct_back"
-                            /> */}
                         </Link>
-                        <h4>Add to Cart</h4>
-                      </div>
-                      <div
-                        className="trendyProductImagesCart"
-                        onClick={() => dispatch(addToCart(book))}
-                      >
-                        <FaCartPlus />
                       </div>
                       <div className="trendyProductInfo">
                         <div className="trendyProductCategoryWishlist">
@@ -284,19 +268,7 @@ const Trendy = () => {
                             alt=""
                             className="trendyProduct_front"
                           />
-                          {/* <img
-                              src={product.backImg}
-                              alt=""
-                              className="trendyProduct_back"
-                            /> */}
                         </Link>
-                        <h4>Add to Cart</h4>
-                      </div>
-                      <div
-                        className="trendyProductImagesCart"
-                        onClick={() => dispatch(addToCart(book))}
-                      >
-                        <FaCartPlus />
                       </div>
                       <div className="trendyProductInfo">
                         <div className="trendyProductCategoryWishlist">
@@ -347,19 +319,7 @@ const Trendy = () => {
                             alt=""
                             className="trendyProduct_front"
                           />
-                          {/* <img
-                              src={product.backImg}
-                              alt=""
-                              className="trendyProduct_back"
-                            /> */}
                         </Link>
-                        <h4>Add to Cart</h4>
-                      </div>
-                      <div
-                        className="trendyProductImagesCart"
-                        onClick={() => dispatch(addToCart(book))}
-                      >
-                        <FaCartPlus />
                       </div>
                       <div className="trendyProductInfo">
                         <div className="trendyProductCategoryWishlist">
